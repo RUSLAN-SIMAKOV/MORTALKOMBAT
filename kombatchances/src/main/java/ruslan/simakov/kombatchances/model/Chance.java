@@ -1,7 +1,5 @@
 package ruslan.simakov.kombatchances.model;
 
-import java.util.Random;
-
 public class Chance {
 
     private Integer id;
