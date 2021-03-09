@@ -1,13 +1,13 @@
-package ruslan.simakov.fighterswinchances;
+package ruslan.simakov.kombatchances;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FighterswinchancesApplication {
+public class KombatchancesApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FighterswinchancesApplication.class, args);
+        SpringApplication.run(KombatchancesApplication.class, args);
     }
 
 }
