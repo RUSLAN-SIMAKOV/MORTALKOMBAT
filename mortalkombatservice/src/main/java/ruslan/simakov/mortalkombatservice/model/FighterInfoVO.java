@@ -1,15 +1,15 @@
 package ruslan.simakov.mortalkombatservice.model;
 
-public class Path {
-
+public class FighterInfoVO {
     private Integer id;
     private String name;
-    private Double chance;
 
-    public Path(Integer id, String name, Double chance) {
+    public FighterInfoVO() {
+    }
+
+    public FighterInfoVO(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.chance = chance;
     }
 
     public Integer getId() {
@@ -26,13 +26,5 @@ public class Path {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getChance() {
-        return chance;
-    }
-
-    public void setChance(Double chance) {
-        this.chance = chance;
     }
 }
