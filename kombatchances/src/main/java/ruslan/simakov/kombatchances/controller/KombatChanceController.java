@@ -12,7 +12,9 @@ import java.util.Random;
 public class KombatChanceController {
 
     @GetMapping("getchance")
-    public Chance getChance() {
+    public Chance getChance() throws InterruptedException {
+        long randomSleepService = new Random().nextInt(5000);
+        Thread.sleep(randomSleepService);
         return new Chance(1, new Random().nextDouble());
     }
 }
