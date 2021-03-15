@@ -3,6 +3,7 @@ package ruslan.simakov.mortalkombatservice.service.impl;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ruslan.simakov.mortalkombatservice.model.ChanceVO;
@@ -14,6 +15,9 @@ public class ChanceFallbackServiceImpl implements ChanceFallbackService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${url-kombat-chances-service}")
+    private String urlKombatChancesService;
+
     @HystrixCommand(defaultFallback = "getFallbackChance",
             threadPoolKey = "chancePool",
             threadPoolProperties = {
@@ -23,7 +27,7 @@ public class ChanceFallbackServiceImpl implements ChanceFallbackService {
     )
     public ChanceVO getChance() {
         return restTemplate.getForObject(
-                "https://kombat-chances-service/getchance",
+                urlKombatChancesService,
                 ChanceVO.class);
     }
 

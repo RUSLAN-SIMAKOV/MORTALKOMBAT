@@ -3,6 +3,7 @@ package ruslan.simakov.mortalkombatservice.service.impl;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ruslan.simakov.mortalkombatservice.model.FighterInfoVO;
@@ -14,6 +15,9 @@ public class FighterInfoFallbackServiceImpl implements FighterInfoFallbackServic
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${url-mortal-komabat-info-service}")
+    private String urlMortalKombatInfoService;
+
     @HystrixCommand(
             defaultFallback = "getFallbackFighterInfo",
             threadPoolKey = "fighterInfoPool",
@@ -24,7 +28,7 @@ public class FighterInfoFallbackServiceImpl implements FighterInfoFallbackServic
     )
     public FighterInfoVO getFighterInfo() {
         return restTemplate.getForObject(
-                "https://mortal-komabat-info-service/getFighterInfo/1",
+                urlMortalKombatInfoService,
                 FighterInfoVO.class);
     }
 
