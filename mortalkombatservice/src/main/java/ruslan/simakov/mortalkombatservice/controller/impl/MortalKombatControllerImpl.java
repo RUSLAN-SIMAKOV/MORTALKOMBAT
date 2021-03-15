@@ -9,6 +9,8 @@ import org.springframework.web.client.RestTemplate;
 import ruslan.simakov.mortalkombatservice.model.ChanceVO;
 import ruslan.simakov.mortalkombatservice.model.FighterInfoVO;
 import ruslan.simakov.mortalkombatservice.model.Path;
+import ruslan.simakov.mortalkombatservice.service.ChanceFallbackService;
+import ruslan.simakov.mortalkombatservice.service.FighterInfoFallbackService;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,38 +21,16 @@ public class MortalKombatControllerImpl {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private ChanceFallbackService chanceFallbackService;
+    @Autowired
+    private FighterInfoFallbackService fighterInfoFallbackService;
 
     @GetMapping("chooseyourdestiny")
-    @HystrixCommand(defaultFallback = "getFallbackPath")
     public List<Path> getFightingPaths() {
-
-        ChanceVO chance = getChance();
-
-        FighterInfoVO fighterInfo = getFighterInfo();
-
+        ChanceVO chance = chanceFallbackService.getChance();
+        FighterInfoVO fighterInfo = fighterInfoFallbackService.getFighterInfo();
         return Collections.singletonList(new Path(fighterInfo.getId(), fighterInfo.getName(), chance.getWinChance()));
-    }
-
-    @HystrixCommand(defaultFallback = "getFallbackFighterInfo")
-    private FighterInfoVO getFighterInfo() {
-        return restTemplate.getForObject(
-                "https://mortal-komabat-info-service/getFighterInfo/1",
-                FighterInfoVO.class);
-    }
-
-    @HystrixCommand(defaultFallback = "getFallbackChance")
-    private ChanceVO getChance() {
-        return restTemplate.getForObject(
-                "https://kombat-chances-service/getchance",
-                ChanceVO.class);
-    }
-
-    private FighterInfoVO getFallbackFighterInfo() {
-        return new FighterInfoVO(1, "NONAME");
-    }
-
-    private ChanceVO getFallbackChance() {
-        return new ChanceVO(0,0.0);
     }
 }
 
