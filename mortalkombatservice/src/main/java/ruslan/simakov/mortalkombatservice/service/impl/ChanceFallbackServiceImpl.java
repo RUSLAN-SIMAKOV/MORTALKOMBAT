@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ruslan.simakov.mortalkombatservice.config.UrlService;
 import ruslan.simakov.mortalkombatservice.model.ChanceVO;
 import ruslan.simakov.mortalkombatservice.service.ChanceFallbackService;
 
@@ -15,8 +16,8 @@ public class ChanceFallbackServiceImpl implements ChanceFallbackService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${url-kombat-chances-service}")
-    private String urlKombatChancesService;
+    @Autowired
+    private UrlService urlService;
 
     @HystrixCommand(defaultFallback = "getFallbackChance",
             threadPoolKey = "chancePool",
@@ -27,7 +28,7 @@ public class ChanceFallbackServiceImpl implements ChanceFallbackService {
     )
     public ChanceVO getChance() {
         return restTemplate.getForObject(
-                urlKombatChancesService,
+                urlService.getKombatChancesService(),
                 ChanceVO.class);
     }
 

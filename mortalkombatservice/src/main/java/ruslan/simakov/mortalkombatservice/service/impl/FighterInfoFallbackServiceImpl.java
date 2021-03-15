@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ruslan.simakov.mortalkombatservice.config.UrlService;
 import ruslan.simakov.mortalkombatservice.model.FighterInfoVO;
 import ruslan.simakov.mortalkombatservice.service.FighterInfoFallbackService;
 
@@ -15,8 +16,8 @@ public class FighterInfoFallbackServiceImpl implements FighterInfoFallbackServic
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${url-mortal-komabat-info-service}")
-    private String urlMortalKombatInfoService;
+    @Autowired
+    private UrlService urlService;
 
     @HystrixCommand(
             defaultFallback = "getFallbackFighterInfo",
@@ -28,7 +29,7 @@ public class FighterInfoFallbackServiceImpl implements FighterInfoFallbackServic
     )
     public FighterInfoVO getFighterInfo() {
         return restTemplate.getForObject(
-                urlMortalKombatInfoService,
+                urlService.getMortalKomabatInfoService(),
                 FighterInfoVO.class);
     }
 
